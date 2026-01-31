@@ -5,8 +5,7 @@
 ```
 SaloonBookingManagement/
 ├── Controllers/
-│   ├── AuthController.cs
-│   └── WeatherForecastController.cs
+│   └── AuthController.cs
 ├── Data/
 │   └── AppDbContext.cs
 ├── DTOs/
@@ -25,8 +24,7 @@ SaloonBookingManagement/
 ├── appsettings.Development.json
 ├── appsettings.json
 ├── Program.cs
-├── SaloonBookingManagement.csproj
-└── WeatherForecast.cs
+└── SaloonBookingManagement.csproj
 ```
 
 ## Commands
@@ -53,9 +51,26 @@ dotnet ef migrations add InitialCreate --project SaloonBookingManagement
 
 ### EF Core – apply migration (create/update database)
 
+From the project folder (where the .csproj is):
+
+```bash
+dotnet ef database update
+```
+
+Or from the solution/parent folder:
+
 ```bash
 dotnet ef database update --project SaloonBookingManagement
 ```
+
+This creates/updates the database and all tables: **Users**, **Categories**, **Services**, **Bookings**, **BookingServices**.
+
+### Alternative: run SQL script (if dotnet ef fails)
+
+If `dotnet restore` or `dotnet ef` fail (e.g. network), create the database and tables manually:
+
+1. Create the database (once): `CREATE DATABASE SaloonBookingDb;` in SSMS/Azure Data Studio.
+2. Run `Scripts/CreateAllTables.sql` against that database (drops existing tables then recreates them).
 
 ### Run the API
 
@@ -69,10 +84,10 @@ Swagger: `https://localhost:7074/swagger` (or the URL from launchSettings.json).
 
 | Method | Endpoint            | Body (JSON)                                      |
 |--------|---------------------|--------------------------------------------------|
-| POST   | `/api/auth/register` | `{ "username": "...", "email": "...", "password": "..." }` |
-| POST   | `/api/auth/login`    | `{ "username": "...", "password": "..." }`       |
+| POST   | `/api/auth/register` | `{ "name": "...", "email": "...", "password": "..." }` |
+| POST   | `/api/auth/login`    | `{ "name": "...", "password": "..." }`       |
 
-Responses return `{ "token": "...", "username": "...", "expiresAt": "..." }`.
+Responses return `{ "token": "...", "name": "...", "expiresAt": "..." }`.
 
 Use the token in Swagger via **Authorize** with value: `Bearer <your-token>`.
 

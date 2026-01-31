@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saloon Booking - Services</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="nav-brand">Saloon Booking</a>
+            <div class="nav-links">
+                <a href="index.html">Services</a>
+                <a href="booking.html" id="nav-book">Book Now</a>
+                <a href="my-bookings.html" id="nav-mybookings">My Bookings</a>
+                <a href="provider-dashboard.html" id="nav-dashboard" style="display:none;">Dashboard</a>
+                <a href="login.html" id="nav-login">Login</a>
+                <a href="register.html" id="nav-register">Register</a>
+                <a href="#" id="nav-logout" style="display:none;">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>Our Services</h1>
+        <p>Click a category to filter services.</p>
+        <div id="categories" class="card-grid"></div>
+        <h2>Services</h2>
+        <div id="services-list" class="card-grid"></div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/services.js"></script>
+    <script>
+        $(function() {
+            servicesPage.init();
+        });
+    </script>
+</body>
+</html>

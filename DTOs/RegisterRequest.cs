@@ -5,8 +5,8 @@ namespace SaloonBookingManagement.DTOs;
 public class RegisterRequest
 {
     [Required]
-    [MinLength(3)]
-    public required string Username { get; set; }
+    [MinLength(2)]
+    public required string Name { get; set; }
 
     [Required]
     [EmailAddress]

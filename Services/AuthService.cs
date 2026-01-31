@@ -1,6 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -24,14 +24,15 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse?> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
-        if (await _db.Users.AnyAsync(u => u.Username == request.Username || u.Email == request.Email, cancellationToken))
+        if (await _db.Users.AnyAsync(u => u.Email == request.Email, cancellationToken))
             return null;
 
         var user = new User
         {
-            Username = request.Username,
+            Name = request.Name,
             Email = request.Email,
-            PasswordHash = HashPassword(request.Password)
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            Role = UserRole.Customer
         };
 
         _db.Users.Add(user);
@@ -42,8 +43,8 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse?> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
-        var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == request.Username, cancellationToken);
-        if (user == null || !VerifyPassword(request.Password, user.PasswordHash))
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             return null;
 
         return BuildAuthResponse(user);
@@ -57,21 +58,25 @@ public class AuthService : IAuthService
         return new AuthResponse
         {
             Token = token,
-            Username = user.Username,
+            UserId = user.Id,
+            Email = user.Email,
+            Role = user.Role,
             ExpiresAt = expiresAt
         };
     }
 
     private string GenerateToken(User user, DateTime expiresAt)
     {
-        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
@@ -83,19 +88,5 @@ public class AuthService : IAuthService
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    private static string HashPassword(string password)
-    {
-        using var sha256 = SHA256.Create();
-        var bytes = System.Text.Encoding.UTF8.GetBytes(password);
-        var hash = sha256.ComputeHash(bytes);
-        return Convert.ToBase64String(hash);
-    }
-
-    private static bool VerifyPassword(string password, string storedHash)
-    {
-        var computed = HashPassword(password);
-        return computed == storedHash;
     }
 }

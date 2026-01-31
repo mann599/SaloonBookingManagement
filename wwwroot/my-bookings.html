@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Saloon Booking</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="nav-brand">Saloon Booking</a>
+            <div class="nav-links">
+                <a href="index.html">Services</a>
+                <a href="booking.html" id="nav-book">Book Now</a>
+                <a href="my-bookings.html" id="nav-mybookings">My Bookings</a>
+                <a href="provider-dashboard.html" id="nav-dashboard" style="display:none;">Dashboard</a>
+                <a href="#" id="nav-logout">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>My Bookings</h1>
+        <div class="form-group">
+            <label for="status-filter">Filter by status</label>
+            <select id="status-filter">
+                <option value="">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div id="bookings-list" class="card-grid"></div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        $(function() {
+            dashboard.init();
+        });
+    </script>
+</body>
+</html>

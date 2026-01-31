@@ -1,5 +1,4 @@
 using SaloonBookingManagement.DTOs;
-using SaloonBookingManagement.Entities;
 
 namespace SaloonBookingManagement.Services;
 

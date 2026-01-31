@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book - Saloon Booking</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="nav-brand">Saloon Booking</a>
+            <div class="nav-links">
+                <a href="index.html">Services</a>
+                <a href="booking.html" id="nav-book">Book Now</a>
+                <a href="my-bookings.html" id="nav-mybookings">My Bookings</a>
+                <a href="provider-dashboard.html" id="nav-dashboard" style="display:none;">Dashboard</a>
+                <a href="#" id="nav-logout">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>New Booking</h1>
+        <div class="card">
+            <form id="booking-form">
+                <div class="form-group">
+                    <label for="booking-date">Date</label>
+                    <input type="date" id="booking-date" name="bookingDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-time">Time</label>
+                    <input type="time" id="booking-time" name="time" required>
+                </div>
+                <div class="form-group">
+                    <label>Select Services</label>
+                    <div id="services-checkboxes"></div>
+                </div>
+                <p id="booking-total">Total: $0.00</p>
+                <p id="booking-error" class="error-msg"></p>
+                <button type="submit" class="btn btn-primary">Create Booking</button>
+            </form>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/booking.js"></script>
+    <script>
+        $(function() {
+            bookingPage.init();
+        });
+    </script>
+</body>
+</html>

@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.RegisterAsync(request, cancellationToken);
         if (result == null)
-            return BadRequest("Username or email already exists.");
+            return BadRequest("Email already exists.");
 
         return Ok(result);
     }
@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.LoginAsync(request, cancellationToken);
         if (result == null)
-            return Unauthorized("Invalid username or password.");
+            return Unauthorized("Invalid email or password.");
 
         return Ok(result);
     }

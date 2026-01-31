@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard - Saloon Booking</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="nav-brand">Saloon Booking</a>
+            <div class="nav-links">
+                <a href="index.html">Services</a>
+                <a href="provider-dashboard.html" id="nav-dashboard">Dashboard</a>
+                <a href="#" id="nav-logout">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>All Bookings</h1>
+        <p id="dashboard-error" class="error-msg"></p>
+        <div class="table-wrap">
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>User Id</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Services</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings-tbody"></tbody>
+            </table>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/provider-dashboard.js"></script>
+    <script>
+        $(function() {
+            providerDashboard.init();
+        });
+    </script>
+</body>
+</html>
