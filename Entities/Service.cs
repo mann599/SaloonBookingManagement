@@ -7,6 +7,7 @@ public class Service
     public required string Name { get; set; }
     public decimal Price { get; set; }
     public int Duration { get; set; }
+    public string? Image { get; set; }
 
     public Category Category { get; set; } = null!;
     public ICollection<BookingService> BookingServices { get; set; } = new List<BookingService>();

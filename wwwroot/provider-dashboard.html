@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Provider Dashboard - Saloon Booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="header">
         <nav class="nav">
-            <a href="index.html" class="nav-brand">Saloon Booking</a>
+            <a href="index.html" class="nav-brand">
+                <img src="image/Logo.jpg" alt="Saloon Booking Logo" class="nav-logo">
+            </a>
             <div class="nav-links">
                 <a href="index.html">Services</a>
                 <a href="provider-dashboard.html" id="nav-dashboard">Dashboard</a>
@@ -17,27 +20,163 @@
             </div>
         </nav>
     </header>
+    
     <main class="container">
-        <h1>All Bookings</h1>
-        <p id="dashboard-error" class="error-msg"></p>
-        <div class="table-wrap">
-            <table class="booking-table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>User Id</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Services</th>
-                        <th>Status</th>
-                        <th>Total</th>
-                        <th>Update</th>
-                    </tr>
-                </thead>
-                <tbody id="bookings-tbody"></tbody>
-            </table>
+        <div class="dashboard-header">
+            <h1>Provider Dashboard</h1>
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" data-tab="bookings">Bookings</button>
+                <button class="tab-btn" data-tab="services">Manage Services</button>
+                <button class="tab-btn" data-tab="categories">Manage Categories</button>
+            </div>
+        </div>
+
+        <!-- Bookings Tab -->
+        <div id="bookings-tab" class="tab-content active">
+            <div class="section-header">
+                <h2>All Bookings</h2>
+                <p id="dashboard-error" class="error-msg"></p>
+            </div>
+            <div class="table-wrap">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>User Id</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Services</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Update</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Services Tab -->
+        <div id="services-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Manage Services</h2>
+                <button class="btn btn-primary" id="add-service-btn">
+                    <i class="fas fa-plus"></i> Add New Service
+                </button>
+            </div>
+            <div id="services-error" class="error-msg"></div>
+            <div class="table-wrap">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Duration</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="services-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Categories Tab -->
+        <div id="categories-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Manage Categories</h2>
+                <button class="btn btn-primary" id="add-category-btn">
+                    <i class="fas fa-plus"></i> Add New Category
+                </button>
+            </div>
+            <div id="categories-error" class="error-msg"></div>
+            <div class="table-wrap">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categories-tbody"></tbody>
+                </table>
+            </div>
         </div>
     </main>
+
+    <!-- Service Modal -->
+    <div id="service-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="service-modal-title">Add Service</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="service-form">
+                <input type="hidden" id="service-id">
+                <div class="form-group">
+                    <label for="service-name">Service Name</label>
+                    <input type="text" id="service-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="service-category">Category</label>
+                    <select id="service-category" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="service-price">Price</label>
+                    <input type="number" id="service-price" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="service-duration">Duration (minutes)</label>
+                    <input type="number" id="service-duration" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="service-description">Description</label>
+                    <textarea id="service-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="service-image">Service Image</label>
+                    <input type="file" id="service-image" accept="image/*">
+                    <div id="image-preview" class="image-preview"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="category-modal-title">Add Category</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="category-form">
+                <input type="hidden" id="category-id">
+                <div class="form-group">
+                    <label for="category-name">Category Name</label>
+                    <input type="text" id="category-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="category-description">Description</label>
+                    <textarea id="category-description" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/common.js"></script>
     <script src="js/provider-dashboard.js"></script>

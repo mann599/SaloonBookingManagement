@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saloon Booking - Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="header">
         <nav class="nav">
-            <a href="index.html" class="nav-brand">Saloon Booking</a>
+            <a href="index.html" class="nav-brand">
+                <img src="image/Logo.jpg" alt="Saloon Booking Logo" class="nav-logo">
+            </a>
             <div class="nav-links">
                 <a href="index.html">Services</a>
                 <a href="booking.html" id="nav-book">Book Now</a>
@@ -21,12 +24,41 @@
             </div>
         </nav>
     </header>
-    <main class="container">
-        <h1>Our Services</h1>
-        <p>Click a category to filter services.</p>
-        <div id="categories" class="card-grid"></div>
-        <h2>Services</h2>
-        <div id="services-list" class="card-grid"></div>
+    <main class="container main-content">
+        <div class="content-wrapper">
+            <aside class="filter-sidebar">
+                <div class="filter-card">
+                    <div class="filter-header">
+                        <h4><i class="fas fa-filter"></i> Filters</h4>
+                        <button class="reset-btn">Reset Filter</button>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h5>Search By Keyword</h5>
+                        <div class="search-box">
+                            <input type="text" placeholder="What are you looking for?" class="search-input">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h5>Categories <i class="fas fa-chevron-down"></i></h5>
+                        <div class="checkbox-group" id="filter-categories">
+                            <!-- Categories will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+            <div class="services-content">
+               
+                
+                <div class="services-header">
+                    <h2>Found <span id="service-count">11</span> Services</h2>
+                </div>
+                
+                <div id="services-list" class="services-grid"></div>
+            </div>
+        </div>
     </main>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/common.js"></script>

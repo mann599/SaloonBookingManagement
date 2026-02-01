@@ -7,6 +7,7 @@ public class ServiceResponse
     public required string Name { get; set; }
     public decimal Price { get; set; }
     public int Duration { get; set; }
+    public string? Image { get; set; }
 }
 
 public class ServiceRequest
@@ -15,4 +16,5 @@ public class ServiceRequest
     public required string Name { get; set; }
     public decimal Price { get; set; }
     public int Duration { get; set; }
+    public string? Image { get; set; }
 }

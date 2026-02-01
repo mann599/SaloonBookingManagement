@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaloonBookingManagement.Data;
@@ -13,10 +14,12 @@ namespace SaloonBookingManagement.Controllers;
 public class ServicesController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly IWebHostEnvironment _env;
 
-    public ServicesController(AppDbContext db)
+    public ServicesController(AppDbContext db, IWebHostEnvironment env)
     {
         _db = db;
+        _env = env;
     }
 
     [HttpGet]
@@ -26,7 +29,7 @@ public class ServicesController : ControllerBase
     {
         var list = await _db.Services
             .OrderBy(s => s.Name)
-            .Select(s => new ServiceResponse { Id = s.Id, CategoryId = s.CategoryId, Name = s.Name, Price = s.Price, Duration = s.Duration })
+            .Select(s => new ServiceResponse { Id = s.Id, CategoryId = s.CategoryId, Name = s.Name, Price = s.Price, Duration = s.Duration, Image = s.Image })
             .ToListAsync(cancellationToken);
         return Ok(list);
     }
@@ -39,7 +42,7 @@ public class ServicesController : ControllerBase
         var list = await _db.Services
             .Where(s => s.CategoryId == categoryId)
             .OrderBy(s => s.Name)
-            .Select(s => new ServiceResponse { Id = s.Id, CategoryId = s.CategoryId, Name = s.Name, Price = s.Price, Duration = s.Duration })
+            .Select(s => new ServiceResponse { Id = s.Id, CategoryId = s.CategoryId, Name = s.Name, Price = s.Price, Duration = s.Duration, Image = s.Image })
             .ToListAsync(cancellationToken);
         return Ok(list);
     }
@@ -52,23 +55,58 @@ public class ServicesController : ControllerBase
         var entity = await _db.Services.FindAsync(new object[] { id }, cancellationToken);
         if (entity == null)
             return NotFound();
-        return Ok(new ServiceResponse { Id = entity.Id, CategoryId = entity.CategoryId, Name = entity.Name, Price = entity.Price, Duration = entity.Duration });
+        return Ok(new ServiceResponse { Id = entity.Id, CategoryId = entity.CategoryId, Name = entity.Name, Price = entity.Price, Duration = entity.Duration, Image = entity.Image });
+    }
+
+    [HttpPost("upload")]
+    [ProducesResponseType(typeof(ServiceResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UploadImage(IFormFile file, CancellationToken cancellationToken)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
+
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (ext is not ".jpg" and not ".jpeg" and not ".png" and not ".gif" and not ".webp")
+            return BadRequest("Invalid image type.");
+
+        var webRoot = _env.WebRootPath
+            ?? Path.Combine(_env.ContentRootPath, "wwwroot");
+
+        if (!Directory.Exists(webRoot))
+            Directory.CreateDirectory(webRoot);
+
+        var dir = Path.Combine(webRoot, "image", "services");
+
+        if (!Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
+        var fileName = Guid.NewGuid().ToString("N") + ext;
+        var path = Path.Combine(dir, fileName);
+
+        await using var stream = new FileStream(path, FileMode.Create);
+        await file.CopyToAsync(stream, cancellationToken);
+
+        return Ok(new { url = "/image/services/" + fileName });
+
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(ServiceResponse), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] ServiceRequest request, CancellationToken cancellationToken)
     {
+
         var entity = new Service
         {
             CategoryId = request.CategoryId,
             Name = request.Name,
             Price = request.Price,
-            Duration = request.Duration
+            Duration = request.Duration,
+            Image = request.Image
         };
         _db.Services.Add(entity);
         await _db.SaveChangesAsync(cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id = entity.Id }, new ServiceResponse { Id = entity.Id, CategoryId = entity.CategoryId, Name = entity.Name, Price = entity.Price, Duration = entity.Duration });
+        return CreatedAtAction(nameof(GetById), new { id = entity.Id }, new ServiceResponse { Id = entity.Id, CategoryId = entity.CategoryId, Name = entity.Name, Price = entity.Price, Duration = entity.Duration, Image = entity.Image });
     }
 
     [HttpPut("{id:int}")]
@@ -76,6 +114,8 @@ public class ServicesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] ServiceRequest request, CancellationToken cancellationToken)
     {
+
+
         var entity = await _db.Services.FindAsync(new object[] { id }, cancellationToken);
         if (entity == null)
             return NotFound();
@@ -83,8 +123,9 @@ public class ServicesController : ControllerBase
         entity.Name = request.Name;
         entity.Price = request.Price;
         entity.Duration = request.Duration;
+        entity.Image = request.Image;
         await _db.SaveChangesAsync(cancellationToken);
-        return Ok(new ServiceResponse { Id = entity.Id, CategoryId = entity.CategoryId, Name = entity.Name, Price = entity.Price, Duration = entity.Duration });
+        return Ok(new ServiceResponse { Id = entity.Id, CategoryId = entity.CategoryId, Name = entity.Name, Price = entity.Price, Duration = entity.Duration, Image = entity.Image });
     }
 
     [HttpDelete("{id:int}")]
