@@ -19,6 +19,7 @@ var providerDashboard = {
         this.initModals();
         this.loadAll();
         this.initEventHandlers();
+        this.initRefreshButton();
     },
 
     initTabs: function() {
@@ -95,6 +96,32 @@ var providerDashboard = {
                 // If upload endpoint doesn't exist, we'll handle it in the save function
             }
         });
+    },
+
+    initRefreshButton: function() {
+        var self = this;
+        $('#refresh-bookings').on('click', function() {
+            self.loadAll();
+        });
+    },
+
+    updateStats: function() {
+        var self = this;
+        var totalBookings = self.bookings.length;
+        var pendingBookings = 0;
+        var confirmedBookings = 0;
+        var totalServices = Object.keys(self.servicesMap).length;
+        
+        self.bookings.forEach(function(booking) {
+            var status = typeof booking.status === "number" ? booking.status : self.STATUS_NAMES.indexOf(booking.status);
+            if (status === 0) pendingBookings++;
+            else if (status === 1) confirmedBookings++;
+        });
+        
+        $('#total-bookings').text(totalBookings);
+        $('#pending-bookings').text(pendingBookings);
+        $('#confirmed-bookings').text(confirmedBookings);
+        $('#total-services').text(totalServices);
     },
 
     initEventHandlers: function() {
@@ -197,6 +224,7 @@ var providerDashboard = {
             self.servicesMap = servicesById;
             self.categoriesMap = categoriesById;
             self.render(bookings);
+            self.updateStats();
         }).fail(function(xhr) {
             if (xhr && xhr.status === 401) redirectToLogin();
             else $("#dashboard-error").text("Failed to load data.");
@@ -293,7 +321,6 @@ var providerDashboard = {
             .done(function(category) {
                 $('#category-id').val(category.id);
                 $('#category-name').val(category.name);
-                $('#category-description').val(category.description || '');
             })
             .fail(function() {
                 $('#categories-error').text('Failed to load category details.');
@@ -413,8 +440,7 @@ var providerDashboard = {
         var isEdit = categoryId !== '';
         
         var categoryData = {
-            name: $('#category-name').val(),
-            description: $('#category-description').val()
+            name: $('#category-name').val()
         };
         
         var url = isEdit ? API_BASE + "/categories/" + categoryId : API_BASE + "/categories";
@@ -516,13 +542,12 @@ var providerDashboard = {
         var html = "";
         
         if (!categories || categories.length === 0) {
-            html = "<tr><td colspan='4'>No categories found.</td></tr>";
+            html = "<tr><td colspan='3'>No categories found.</td></tr>";
         } else {
             categories.forEach(function(c) {
                 html += "<tr>" +
                     "<td>" + c.id + "</td>" +
                     "<td>" + escapeHtml(c.name) + "</td>" +
-                    "<td>" + escapeHtml(c.description || '') + "</td>" +
                     "<td>" +
                     "<div class='action-buttons'>" +
                     "<button class='btn-edit' onclick='providerDashboard.openCategoryModal(" + c.id + ")'>" +

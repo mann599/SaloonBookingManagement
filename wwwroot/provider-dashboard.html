@@ -22,88 +22,170 @@
     </header>
     
     <main class="container">
-        <div class="dashboard-header">
-            <h1>Provider Dashboard</h1>
-            <div class="dashboard-tabs">
-                <button class="tab-btn active" data-tab="bookings">Bookings</button>
-                <button class="tab-btn" data-tab="services">Manage Services</button>
-                <button class="tab-btn" data-tab="categories">Manage Categories</button>
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="animated-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Provider Dashboard
+                </h1>
+                <p class="header-subtitle">Manage your salon services and bookings</p>
             </div>
         </div>
 
-        <!-- Bookings Tab -->
-        <div id="bookings-tab" class="tab-content active">
-            <div class="section-header">
-                <h2>All Bookings</h2>
-                <p id="dashboard-error" class="error-msg"></p>
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card fade-in">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="total-bookings">0</h3>
+                    <p>Total Bookings</p>
+                </div>
             </div>
-            <div class="table-wrap">
-                <table class="booking-table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>User Id</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Services</th>
-                            <th>Status</th>
-                            <th>Total</th>
-                            <th>Update</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookings-tbody"></tbody>
-                </table>
+            <div class="stat-card fade-in">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="pending-bookings">0</h3>
+                    <p>Pending</p>
+                </div>
             </div>
-        </div>
-
-        <!-- Services Tab -->
-        <div id="services-tab" class="tab-content">
-            <div class="section-header">
-                <h2>Manage Services</h2>
-                <button class="btn btn-primary" id="add-service-btn">
-                    <i class="fas fa-plus"></i> Add New Service
-                </button>
+            <div class="stat-card fade-in">
+                <div class="stat-icon confirmed">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="confirmed-bookings">0</h3>
+                    <p>Confirmed</p>
+                </div>
             </div>
-            <div id="services-error" class="error-msg"></div>
-            <div class="table-wrap">
-                <table class="booking-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Duration</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="services-tbody"></tbody>
-                </table>
+            <div class="stat-card fade-in">
+                <div class="stat-icon services">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="total-services">0</h3>
+                    <p>Services</p>
+                </div>
             </div>
         </div>
 
-        <!-- Categories Tab -->
-        <div id="categories-tab" class="tab-content">
-            <div class="section-header">
-                <h2>Manage Categories</h2>
-                <button class="btn btn-primary" id="add-category-btn">
-                    <i class="fas fa-plus"></i> Add New Category
-                </button>
+        <div class="dashboard-content">
+            <div class="dashboard-tabs-container">
+                <div class="dashboard-tabs">
+                    <button class="tab-btn active" data-tab="bookings">
+                        <i class="fas fa-calendar-alt"></i>
+                        Bookings
+                    </button>
+                    <button class="tab-btn" data-tab="services">
+                        <i class="fas fa-spa"></i>
+                        Manage Services
+                    </button>
+                    <button class="tab-btn" data-tab="categories">
+                        <i class="fas fa-th-large"></i>
+                        Manage Categories
+                    </button>
+                </div>
             </div>
-            <div id="categories-error" class="error-msg"></div>
-            <div class="table-wrap">
-                <table class="booking-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="categories-tbody"></tbody>
-                </table>
+
+            <!-- Bookings Tab -->
+            <div id="bookings-tab" class="tab-content active">
+                <div class="content-card fade-in">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-calendar-alt"></i>
+                            All Bookings
+                        </h2>
+                        <div class="header-actions">
+                            <button class="btn btn-outline" id="refresh-bookings">
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <p id="dashboard-error" class="error-msg"></p>
+                    <div class="table-container">
+                        <table class="booking-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User ID</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Services</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Update</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Tab -->
+            <div id="services-tab" class="tab-content">
+                <div class="content-card fade-in">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-spa"></i>
+                            Manage Services
+                        </h2>
+                        <button class="btn btn-primary" id="add-service-btn">
+                            <i class="fas fa-plus"></i>
+                            Add New Service
+                        </button>
+                    </div>
+                    <div id="services-error" class="error-msg"></div>
+                    <div class="table-container">
+                        <table class="booking-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Duration</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="services-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Tab -->
+            <div id="categories-tab" class="tab-content">
+                <div class="content-card fade-in">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-th-large"></i>
+                            Manage Categories
+                        </h2>
+                        <button class="btn btn-primary" id="add-category-btn">
+                            <i class="fas fa-plus"></i>
+                            Add New Category
+                        </button>
+                    </div>
+                    <div id="categories-error" class="error-msg"></div>
+                    <div class="table-container">
+                        <table class="booking-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categories-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -164,10 +246,6 @@
                 <div class="form-group">
                     <label for="category-name">Category Name</label>
                     <input type="text" id="category-name" required>
-                </div>
-                <div class="form-group">
-                    <label for="category-description">Description</label>
-                    <textarea id="category-description" rows="3"></textarea>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>

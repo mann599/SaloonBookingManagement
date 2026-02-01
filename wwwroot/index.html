@@ -25,23 +25,33 @@
         </nav>
     </header>
     <main class="container main-content">
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="animated-title">
+                    <i class="fas fa-spa"></i>
+                    Our Premium Services
+                </h1>
+                <p class="header-subtitle">Discover our wide range of beauty and wellness treatments</p>
+            </div>
+        </div>
+
         <div class="content-wrapper">
             <aside class="filter-sidebar">
                 <div class="filter-card">
                     <div class="filter-header">
-                        <h4><i class="fas fa-filter"></i> Filters</h4>
-                        <button class="reset-btn">Reset Filter</button>
+                        <h4><i class="fas fa-filter"></i> Filter Services</h4>
+                        <button class="reset-btn">
+                            <i class="fas fa-redo"></i>
+                            Reset
+                        </button>
                     </div>
                     
                     <div class="filter-section">
-                        <h5>Search By Keyword</h5>
-                        <div class="search-box">
-                            <input type="text" placeholder="What are you looking for?" class="search-input">
-                        </div>
-                    </div>
-                    
-                    <div class="filter-section">
-                        <h5>Categories <i class="fas fa-chevron-down"></i></h5>
+                        <h5>
+                            <i class="fas fa-th-large"></i>
+                            Categories
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </h5>
                         <div class="checkbox-group" id="filter-categories">
                             <!-- Categories will be dynamically loaded here -->
                         </div>
@@ -50,13 +60,42 @@
             </aside>
             
             <div class="services-content">
-               
-                
                 <div class="services-header">
-                    <h2>Found <span id="service-count">11</span> Services</h2>
+                    <div class="header-left">
+                        <h2>
+                            <i class="fas fa-list"></i>
+                            Found <span id="service-count" class="count-highlight">11</span> Services
+                        </h2>
+                    </div>
+                    <div class="header-right">
+                        <div class="sort-options">
+                            <label for="sort-select">Sort by:</label>
+                            <select id="sort-select" class="sort-select">
+                                <option value="name">Name</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="rating">Rating</option>
+                            </select>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-btn" data-view="list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
                 <div id="services-list" class="services-grid"></div>
+                
+                <div class="load-more-container">
+                    <button class="btn btn-outline load-more-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        Load More Services
+                    </button>
+                </div>
             </div>
         </div>
     </main>
